@@ -1,53 +1,48 @@
 package datastracture;
 
 import datastructures.Graph;
-import datastructures.MapGraph;
+import datastructures.IntegerListGraph;
 import datastructures.MatrixGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 
-public class MatrixGraphTests {
+public class IntegerListGraphTests {
 
     private Graph<Integer> graph;
 
     @BeforeEach
     private void before(){
-        graph = new MatrixGraph(1);
+        graph = new IntegerListGraph(1);
     }
 
     @Test
     public void addEdgeWithNotExistedSourceMoreThenNewVertex(){
         graph.addEdge(1,0);
 
-        Assertions.assertArrayEquals(new Integer[]{1,0}, graph.getChildrenOf(1).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0}, graph.getChildrenOf(0).toArray());
+        Assertions.assertArrayEquals(new Integer[]{0}, graph.getChildrenOf(1).toArray());
+        Assertions.assertArrayEquals(new Integer[]{}, graph.getChildrenOf(0).toArray());
     }
 
     @Test
     public void addEdgeWithNotExistedVertexMoreThenSource(){
         graph.addEdge(0,1);
 
-        Assertions.assertArrayEquals(new Integer[]{0,1}, graph.getChildrenOf(0).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0}, graph.getChildrenOf(1).toArray());
+        Assertions.assertArrayEquals(new Integer[]{1}, graph.getChildrenOf(0).toArray());
+        Assertions.assertArrayEquals(new Integer[]{}, graph.getChildrenOf(1).toArray());
     }
 
     @Test
     public void addEdgeWithExistedSource(){
         graph.addEdge(0,0);
 
-        Assertions.assertArrayEquals(new Integer[]{1}, graph.getChildrenOf(0).toArray());
+        Assertions.assertArrayEquals(new Integer[]{0}, graph.getChildrenOf(0).toArray());
     }
     @Test
     public void add2LevelEdges(){
@@ -58,15 +53,15 @@ public class MatrixGraphTests {
         graph.addEdge(3, 8);
         graph.addEdge(4, 6);
 
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,1,1,0,0,0,0}, graph.getChildrenOf(5).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,0,0,0,1,0,0}, graph.getChildrenOf(4).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,0,0,0,0,1,1}, graph.getChildrenOf(3).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,0,0,0,0,0,0}, graph.getChildrenOf(0).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,0,0,0,0,0,0}, graph.getChildrenOf(1).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,0,0,0,0,0,0}, graph.getChildrenOf(2).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,0,0,0,0,0,0}, graph.getChildrenOf(6).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,0,0,0,0,0,0}, graph.getChildrenOf(7).toArray());
-        Assertions.assertArrayEquals(new Integer[]{0,0,0,0,0,0,0,0,0}, graph.getChildrenOf(8).toArray());
+        Assertions.assertArrayEquals(new Integer[]{4,3}, graph.getChildrenOf(5).toArray());
+        Assertions.assertArrayEquals(new Integer[]{6}, graph.getChildrenOf(4).toArray());
+        Assertions.assertArrayEquals(new Integer[]{7,8}, graph.getChildrenOf(3).toArray());
+        Assertions.assertArrayEquals(new Integer[]{}, graph.getChildrenOf(0).toArray());
+        Assertions.assertArrayEquals(new Integer[]{}, graph.getChildrenOf(1).toArray());
+        Assertions.assertArrayEquals(new Integer[]{}, graph.getChildrenOf(2).toArray());
+        Assertions.assertArrayEquals(new Integer[]{}, graph.getChildrenOf(6).toArray());
+        Assertions.assertArrayEquals(new Integer[]{}, graph.getChildrenOf(7).toArray());
+        Assertions.assertArrayEquals(new Integer[]{}, graph.getChildrenOf(8).toArray());
     }
     /////////////////////////////////////////////////////////////////////////////
     @Test
@@ -98,7 +93,7 @@ public class MatrixGraphTests {
 
         graph.bfs((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 3,4,7,8,6}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 4,3,6,7,8}, list.toArray());
     }
 
     @Test
@@ -115,7 +110,7 @@ public class MatrixGraphTests {
 
         graph.bfs((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 3,4,7,8,6}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 4,3,6,7,8}, list.toArray());
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -149,7 +144,7 @@ public class MatrixGraphTests {
 
         graph.dfsRecursively((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 3,7,8,4,6}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 4,6,3,7,8}, list.toArray());
     }
 
     @Test
@@ -166,9 +161,8 @@ public class MatrixGraphTests {
 
         graph.dfsRecursively((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 3,7,4,6,8}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 4,6,3,7,8}, list.toArray());
     }
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -201,7 +195,7 @@ public class MatrixGraphTests {
 
         graph.dfsIteratively((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 3,7,8,4,6}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 4,6,3,7,8}, list.toArray());
     }
 
     @Test
@@ -217,9 +211,7 @@ public class MatrixGraphTests {
         graph.addEdge(4, 5);
 
         graph.dfsIteratively((v) -> list.add(v), 5);
-        System.out.println(list.toString());
-        Assertions.assertArrayEquals(new Integer[]{5, 3,7,4,6,8}, list.toArray());
+
+        Assertions.assertArrayEquals(new Integer[]{5, 4,6,3,7,8}, list.toArray());
     }
-
-
 }

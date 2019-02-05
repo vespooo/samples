@@ -18,26 +18,30 @@ public class MatrixGraph implements Graph<Integer>{
 
     @Override
     public void addEdge(Integer source, Integer newVertex) {
-        int[][] temp = edges;
         if (source>=count || newVertex>=count){
             if(source>newVertex) {
                 count = source+1;
             } else {
                 count = newVertex+1;
             }
-            edges = new int[count][count];
-            for(int i=0; i<temp.length; i++){
-                edges[i]= Arrays.copyOf(temp[i], count);
-            }
+            extendArray();
         }
         edges[source][newVertex] =1;
+    }
+
+    private void extendArray() {
+        int[][] temp = edges;
+        edges = new int[count][count];
+        for(int i=0; i<temp.length; i++){
+            edges[i]= Arrays.copyOf(temp[i], count);
+        }
     }
 
     @Override
     public void addVertex(Integer source) {
         if (source>=count){
             count = source+1;
-            edges= new int[count][count];
+            extendArray();
         }
     }
 
@@ -95,6 +99,8 @@ public class MatrixGraph implements Graph<Integer>{
 
     @Override
     public List<Integer> getChildrenOf(Integer source) {
-        return Arrays.stream(edges[source]).boxed().collect(Collectors.toList());
+        if (source<count)
+            return Arrays.stream(edges[source]).boxed().collect(Collectors.toList());
+        return null;
     }
 }
