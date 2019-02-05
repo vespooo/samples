@@ -55,11 +55,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return tree.value;
     }
 
-    public List<T> preOrderDFS(Consumer<T> vertexHandling){
-         List<T> list = new ArrayList<>();
-         return list;
-     }
-
     public Node<T> getRoot() {
         return root;
     }
