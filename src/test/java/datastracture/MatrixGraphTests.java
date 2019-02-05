@@ -24,22 +24,41 @@ public class MatrixGraphTests {
 
     @BeforeEach
     private void before(){
-        graph = new MatrixGraph(8);
+        graph = new MatrixGraph(1);
     }
 
     @Test
-    public void addEdgeWithNotExistedSource(){
-        graph.addEdge(5,3);
+    public void addEdgeWithNotExistedSourceMoreThenNewVertex(){
+        graph.addEdge(1,0);
 
-        Assertions.assertArrayEquals(new Integer[]{3}, graph.getChildrenOf(5).toArray());
+        Assertions.assertArrayEquals(new Integer[]{1,0}, graph.getChildrenOf(1).toArray());
+        Assertions.assertArrayEquals(new Integer[]{0,0}, graph.getChildrenOf(0).toArray());
+    }
+
+    @Test
+    public void addEdgeWithNotExistedVertexMoreThenSource(){
+        graph.addEdge(0,1);
+
+        Assertions.assertArrayEquals(new Integer[]{0,1}, graph.getChildrenOf(0).toArray());
+        Assertions.assertArrayEquals(new Integer[]{0,0}, graph.getChildrenOf(1).toArray());
     }
 
     @Test
     public void addEdgeWithExistedSource(){
-        graph.addEdge(5,3);
-        graph.addEdge(5,4);
+        graph.addEdge(0,0);
 
-        Assertions.assertArrayEquals(new Integer[]{3, 4}, graph.getChildrenOf(5).toArray());
+        Assertions.assertArrayEquals(new Integer[]{1}, graph.getChildrenOf(0).toArray());
+    }
+    @Test
+    public void add2LevelEdges(){
+        List<Integer> list = new ArrayList<>();
+        graph.addEdge(5, 4);
+        graph.addEdge(5, 3);
+        graph.addEdge(3, 7);
+        graph.addEdge(3, 8);
+        graph.addEdge(4, 6);
+
+        Assertions.assertArrayEquals(new Integer[]{0,0,0,1,1,0,0,0,0}, graph.getChildrenOf(5).toArray());
     }
     /////////////////////////////////////////////////////////////////////////////
     @Test
@@ -71,7 +90,7 @@ public class MatrixGraphTests {
 
         graph.bfs((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 4,3,6,7,8}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 3,4,7,8,6}, list.toArray());
     }
 
     @Test
@@ -88,7 +107,7 @@ public class MatrixGraphTests {
 
         graph.bfs((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 4,3,6,7,8}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 3,4,7,8,6}, list.toArray());
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -122,7 +141,7 @@ public class MatrixGraphTests {
 
         graph.dfsRecursively((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 4,6,3,7,8}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 3,7,8,4,6}, list.toArray());
     }
 
     @Test
@@ -139,8 +158,9 @@ public class MatrixGraphTests {
 
         graph.dfsRecursively((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 4,6,3,7,8}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 3,7,4,6,8}, list.toArray());
     }
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -173,11 +193,10 @@ public class MatrixGraphTests {
 
         graph.dfsIteratively((v) -> list.add(v), 5);
 
-        Assertions.assertArrayEquals(new Integer[]{5, 4,6,3,7,8}, list.toArray());
+        Assertions.assertArrayEquals(new Integer[]{5, 3,7,8,4,6}, list.toArray());
     }
 
-    @ParameterizedTest
-    @MethodSource("oddElArr")
+    @Test
     public void dfsIteratively2LevelWithLoopsGraph(){
         List<Integer> list = new ArrayList<>();
         graph.addEdge(5, 4);
@@ -190,17 +209,9 @@ public class MatrixGraphTests {
         graph.addEdge(4, 5);
 
         graph.dfsIteratively((v) -> list.add(v), 5);
-
-        Assertions.assertArrayEquals(new Integer[]{5, 4,6,3,7,8}, list.toArray());
+        System.out.println(list.toString());
+        Assertions.assertArrayEquals(new Integer[]{5, 3,7,4,6,8}, list.toArray());
     }
 
-    private static Stream<Arguments> oddElArr(){
-        return Stream.of(Arguments.of(new int[]{0,1, 25, 49, 64 }, new int[]{-5,-1,0,7, 8}));
-    }
 
-    public static Collection<Graph> instancesToTest() {
-        return Arrays.asList(
-                new MapGraph<>()
-        );
-    }
 }

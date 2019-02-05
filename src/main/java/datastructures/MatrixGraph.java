@@ -1,9 +1,11 @@
 package datastructures;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class MatrixGraph implements Graph<Integer>{
     private int count;
@@ -16,13 +18,16 @@ public class MatrixGraph implements Graph<Integer>{
 
     @Override
     public void addEdge(Integer source, Integer newVertex) {
-        if (source>=count){
+        int[][] temp = edges;
+        if (source>=count || newVertex>=count){
             if(source>newVertex) {
                 count = source+1;
-                edges= new int[count][count];
             } else {
                 count = newVertex+1;
-                edges= new int[count][count];
+            }
+            edges = new int[count][count];
+            for(int i=0; i<temp.length; i++){
+                edges[i]= Arrays.copyOf(temp[i], count);
             }
         }
         edges[source][newVertex] =1;
@@ -60,9 +65,9 @@ public class MatrixGraph implements Graph<Integer>{
         path.push(root);
         while (!path.isEmpty()){
             Integer vertex = path.pop();
-            handling.accept(vertex);
+            if (visited[vertex] ==0) handling.accept(vertex);
             visited[vertex] = 1;
-            for(int i=0; i<count; i++){
+            for(int i=count-1; i>=0; i--){
                 if(edges[vertex][i] == 1 && visited[i] == 0){
                     path.push(i);
                 }
@@ -79,7 +84,7 @@ public class MatrixGraph implements Graph<Integer>{
             handling.accept(vertex);
             visited[vertex] = 1;
             for(int i=0; i<count; i++){
-                if(visited[vertex]==0 && edges[vertex][i] ==1)
+                if(visited[i]==0 && edges[vertex][i] ==1)
                     children.add(i);
             }
 
@@ -90,6 +95,6 @@ public class MatrixGraph implements Graph<Integer>{
 
     @Override
     public List<Integer> getChildrenOf(Integer source) {
-        return null;
+        return Arrays.stream(edges[source]).boxed().collect(Collectors.toList());
     }
 }
