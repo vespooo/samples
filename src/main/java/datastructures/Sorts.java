@@ -49,38 +49,79 @@ public class Sorts<T extends Comparable<T>> {
     }
 
 
-    public T[] quickSort(T[] arr){
-       quickSort(arr, 0, arr.length-1);
+    public Integer[] quickSort(Integer[] arr){
+        countSwaps(arr, 0, arr.length-1, 0);
        return arr;
     }
 
-    private void quickSort(T[] arr, int left, int right) {
-        if (left>=right) return;
+    static int countSwaps(Integer[] arr, int left, int right, int count){
+        if ( left >= right ) return count;
 
-        T pivot = arr[(left+right)/2];
-        int index = partition(arr, left, right, pivot);
-        quickSort(arr, left,index-1);
-        quickSort(arr, index, right);
-    }
+        int pivot = arr[(left + right)/2];
+        int l = left;
+        int r = right;
 
-    private int partition(T[] arr, int left, int right, T pivot) {
-        while (left<=right){
-            while (arr[left].compareTo(pivot)<0){
-                left++;
+        while(l < r){
+            while (arr[l] < pivot) {l++;}
+            while (arr[r] > pivot) {r--;}
+            if(l < r) {
+                count++;
+                swap(arr, l, r);
             }
-            while (arr[right].compareTo(pivot)>0){
-                right--;
-            }
-            if (left<=right){
-                switchElements(arr, left, right);
-                left++;
-                right--;
-            }
+
         }
-        return left;
+        count += countSwaps(arr, left, l-1, 0);
+        count += countSwaps(arr, l+1, right, 0);
+
+        return count;
     }
+    static void swap(Integer[] arr, int l, int r){
+        int temp = arr[l];
+        arr[l] = arr[r];
+        arr[r] = temp;
+    }
+//    private void quickSort(T[] arr, int left, int right) {
+//        if (left>=right) return;
+//
+//        T pivot = arr[(left+right)/2];
+//        int index = partition(arr, left, right, pivot);
+//        quickSort(arr, left,index-1);
+//        quickSort(arr, index+1, right);
+//    }
+//
+//    private int partition(T[] arr, int left, int right, T pivot) {
+//        while (left<right){
+//            while (arr[left].compareTo(pivot)<0){
+//                left++;
+//            }
+//            while (arr[right].compareTo(pivot)>0){
+//                right--;
+//            }
+//            if (left<right) {
+//                switchElements(arr, left, right);
+//            }
+//
+//        }
+//        return left;
+//    }
 
-
+//    private int partition(T[] arr, int left, int right, T pivot) {
+//        while (left<right){
+//            while (arr[left].compareTo(pivot)<0){
+//                left++;
+//            }
+//            while (arr[right].compareTo(pivot)>0){
+//                right--;
+//            }
+//            if (left<right) {
+//                switchElements(arr, left, right);
+//            }
+//            left++;
+//            right--;
+//
+//        }
+//        return left;
+//    }
 
     private void switchElements(T[] arr, int begin, int end) {
         T temp = arr[begin];

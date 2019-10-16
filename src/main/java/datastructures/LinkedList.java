@@ -73,11 +73,12 @@ public class LinkedList<T> {
             firstUnreversed = secondUnreversed;
         }
     }
-    private class Node<T>{
+    public class Node<T>{
         Node<T> next;
         T value;
 
-        public Node(T value) {
+        Node(){}
+        Node(T value) {
             this.value = value;
         }
 
