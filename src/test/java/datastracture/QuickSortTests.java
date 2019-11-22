@@ -51,6 +51,13 @@ public class QuickSortTests {
     }
 
     @Test
+    public void duplicateElementsSort(){
+        Integer[] arr = sorts.quickSort(new  Integer[]{1, 5,2, 6,7,3,8,2,4});
+
+        Assertions.assertArrayEquals(new Integer[]{1,2,2,3,4,5,6,7,8}, arr);
+    }
+
+    @Test
     public void oddUnsortedElementsSort(){
         Integer[] arr = sorts.quickSort(new  Integer[]{10, 1, 5,3, 9, 2, 7});
 
